@@ -1,0 +1,33 @@
+{
+    "name": "metarush/perm",
+    "type": "library",
+    "description": "Role-based access control (RBAC) with custom rules (like ABAC)",
+    "keywords": [
+        "RBAC",
+        "ABAC",
+        "access control",
+        "roles",
+        "permissions"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "metarush/perm contributors",
+            "homepage": "https://github.com/metarush/perm/graphs/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MetaRush\\Perm\\": "src",
+            "Tests\\": "tests\\unit"
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "phpunit/phpunit": "^9.1",
+        "phpstan/phpstan": "^0.12"
+    }
+}

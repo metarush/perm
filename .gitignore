@@ -1,0 +1,9 @@
+composer.phar
+phpunit.xml
+.phpunit.result.cache
+vendor/
+public/
+resources/
+nbproject/
+tests/mycoverage/
+.env
