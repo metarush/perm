@@ -11,15 +11,15 @@ use MetaRush\Perm\Request;
 
 class PermTest extends TestCase
 {
-    const ROLE_ADMIN = 1;
-    const ROLE_MOD = 2;
-    const ROLE_STAFF = 3;
-    const RESOURCE_CREATE_MOD = 1;
-    const RESOURCE_CREATE_USER = 2;
-    const RESOURCE_CREATE_POST = 3;
-    const RESOURCE_EDIT_POST = 4;
-    const RESOURCE_DELETE_POST = 5;
-    const RESOURCE_DELETE_COMMENT = 6;
+    private const ROLE_ADMIN = 1;
+    private const ROLE_MOD = 2;
+    private const ROLE_STAFF = 3;
+    private const RESOURCE_CREATE_MOD = 1;
+    private const RESOURCE_CREATE_USER = 2;
+    private const RESOURCE_CREATE_POST = 3;
+    private const RESOURCE_EDIT_POST = 4;
+    private const RESOURCE_DELETE_POST = 5;
+    private const RESOURCE_DELETE_COMMENT = 6;
 
     private array $userRoles;
     private array $roleResources;

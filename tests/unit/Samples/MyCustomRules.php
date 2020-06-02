@@ -10,8 +10,8 @@ use MetaRush\Perm\Request;
 class MyCustomRules implements PermissionInterface
 {
     // these are just copies from PermTest.php
-    const RESOURCE_DELETE_POST = 5;
-    const RESOURCE_DELETE_COMMENT = 6;
+    private const RESOURCE_DELETE_POST = 5;
+    private const RESOURCE_DELETE_COMMENT = 6;
 
     private Request $request;
 
