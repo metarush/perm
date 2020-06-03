@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## 1.0.0 - 2020-05-28
+## 1.0.0 - 2020-06-03
 
 - Release first version.
