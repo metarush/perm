@@ -101,10 +101,10 @@ class Perm
 
     /**
      *
-     * @param int $resourceId
+     * @param string $resourceId
      * @return array[]
      */
-    private function getRestrictions(int $resourceId): array
+    private function getRestrictions(string $resourceId): array
     {
         return $this->restrictions[$resourceId];
     }

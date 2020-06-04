@@ -10,8 +10,8 @@ use MetaRush\Perm\Request;
 class MyOwnerFinder implements PermissionInterface
 {
     // these are just copies from PermTest.php
-    private const RESOURCE_EDIT_POST = 4;
-    private const RESOURCE_DELETE_COMMENT = 6;
+    private const RESOURCE_EDIT_POST = 'editPost';
+    private const RESOURCE_DELETE_COMMENT = 'deleteComment';
 
     private Request $request;
 

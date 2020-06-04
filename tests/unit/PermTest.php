@@ -14,12 +14,12 @@ class PermTest extends TestCase
     private const ROLE_ADMIN = 1;
     private const ROLE_MOD = 2;
     private const ROLE_STAFF = 3;
-    private const RESOURCE_CREATE_MOD = 1;
-    private const RESOURCE_CREATE_USER = 2;
-    private const RESOURCE_CREATE_POST = 3;
-    private const RESOURCE_EDIT_POST = 4;
-    private const RESOURCE_DELETE_POST = 5;
-    private const RESOURCE_DELETE_COMMENT = 6;
+    private const RESOURCE_CREATE_MOD = 'createMod';
+    private const RESOURCE_CREATE_USER = 'createUser';
+    private const RESOURCE_CREATE_POST = 'createPost';
+    private const RESOURCE_EDIT_POST = 'editPost';
+    private const RESOURCE_DELETE_POST = 'deletePost';
+    private const RESOURCE_DELETE_COMMENT = 'deleteComment';
 
     private array $userRoles;
     private array $roleResources;

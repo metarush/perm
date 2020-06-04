@@ -6,9 +6,9 @@ class Request
 {
     private int $userId;
     private int $roleId;
-    private int $resourceId;
+    private string $resourceId;
 
-    public function __construct(int $userId, int $roleId, int $resourceId)
+    public function __construct(int $userId, int $roleId, string $resourceId)
     {
         $this->userId = $userId;
         $this->roleId = $roleId;
@@ -25,7 +25,7 @@ class Request
         return $this->roleId;
     }
 
-    public function getResourceId(): int
+    public function getResourceId(): string
     {
         return $this->resourceId;
     }

@@ -22,15 +22,27 @@ An array where keys represent roleIds while values represent an array of resourc
 
 ```php
 $roleResources = [
-    1 => [1,2],
-    2 => [3,4],
-    3 => [5,6]
+    1 => ['1','2'],
+    2 => ['3','4'],
+    3 => ['5','6']
 ];
 ```
 
 Keys `1`,`2`,`3` represent roleIds in your app. This could mean that `1` represents an admin, `2` a moderator, `3` a staff.
 
-Values `[1,2]`, `[3,4]`, `[5,6]` represent resourceIds in your app. This could mean that `1` represents "create user", `2` "edit user", `3` "create post", and so on.
+Values `['1','2']`, `['3','4']`, `['5','6']` represent resourceIds in your app. This could mean that `1` represents "create user", `2` "edit user", `3` "create post", and so on.
+
+You may notice that the values are strings. This is so you could literally use strings like 'createUser' as it can also act as identifiers. Doing this, you may skip explicitly creating a list of numerical resourceIds, as long as app can handle it.
+
+Alternative example:
+
+```php
+$roleResources = [
+    1 => ['createUser', 'editUser'],
+    2 => ['createPost','editPost'],
+    3 => ['readPost', 'createComment']
+];
+```
 
 `Perm` does not care about how you name your roles or resources, it only cares about the roleIds and resourceIds you provide.
 
@@ -51,6 +63,8 @@ $roleRanks = [
 Keys `1`,`2`,`3` represent roleIds in your app. This could mean that `1` represents an admin, `2` a moderator, `3` a staff.
 
 Values `1`,`2`,`3` represent their hierarchy. **Lower value means a higher rank**.
+
+Note: Resources of a lower role are inherited by higher roles. E.g., Resources of a role with rank `3` are inherirted by roles with a rank `2` and `1`.
 
 ---
 
@@ -118,8 +132,6 @@ If you are going to use the restrictions `Perm::RESTRICTION_OWNER`, `Perm::RESTR
 
 Both of these class must implement the provided `PermissionInterface`.
 
-
-
 `PermissionInterface` **$ownerFinderFqn**
 
 Required by:
@@ -129,8 +141,6 @@ Required by:
 - `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`
 
 This custom class that you create will be used as the owner finder for a given resource.
-
-
 
 `PermissionInterface` **$customRulesFqn**
 
@@ -142,15 +152,9 @@ Required by:
 
 This custom class that you create will be used as the custom rule handler for your custom needs.
 
-
-
 For an example on how to implement the `PermissionInterface`, see the `tests/unit/Samples` folder.
 
-
-
 ---
-
-
 
 ## Init the library
 
