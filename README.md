@@ -177,7 +177,7 @@ Create a `Request` object
 ```php
 $userId = 5; // userId of the requesting user
 $roleId = 3; // roleId of $userId e.g., "staff"
-$resourceId = 7; // resourceId of the requested resource e.g., "add user"
+$resourceId = '7'; // resourceId of the requested resource e.g., "add user"
 $request = new Perm\Request($userId, $roleId, $resourceId);
 ```
 
