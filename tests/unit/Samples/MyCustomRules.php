@@ -12,6 +12,7 @@ class MyCustomRules implements PermissionInterface
     // these are just copies from PermTest.php
     private const RESOURCE_DELETE_POST = 'deletePost';
     private const RESOURCE_DELETE_COMMENT = 'deleteComment';
+    private const RESOURCE_DELETE_USER = 'deleteUser';
 
     private Request $request;
 
@@ -28,6 +29,9 @@ class MyCustomRules implements PermissionInterface
 
         if ($resourceId === self::RESOURCE_DELETE_COMMENT)
             return $this->isCommentNotYetRead();
+
+        if ($resourceId === self::RESOURCE_DELETE_USER)
+            return $this->isAtleastOneAdminRemains();
 
         return false;
     }
@@ -46,6 +50,14 @@ class MyCustomRules implements PermissionInterface
         $commentNotYetRead = true;
 
         return $commentNotYetRead;
+    }
+
+    private function isAtleastOneAdminRemains(): bool
+    {
+        // e.g., get number of admins from user db and subtract 1 admin
+        $expectedNumberOfAdminsLeftAfterDeletingUser = 1;
+
+        return ($expectedNumberOfAdminsLeftAfterDeletingUser > 0);
     }
 
 }

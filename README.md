@@ -10,41 +10,9 @@ Install via composer as `metarush/perm`
 
 `Perm` expects you to provide the following arrays:
 
-- **$roleResources**
-- **$roleRanks**
-- **$resourceRestrictions**
-
----
-
-`array` **$roleResources**
-
-An array where keys represent roleIds while values represent an array of resourceIds the roleId has access to. Example:
-
-```php
-$roleResources = [
-    1 => ['1','2'],
-    2 => ['3','4'],
-    3 => ['5','6']
-];
-```
-
-Keys `1`,`2`,`3` represent roleIds in your app. This could mean that `1` represents an admin, `2` a moderator, `3` a staff.
-
-Values `['1','2']`, `['3','4']`, `['5','6']` represent resourceIds in your app. This could mean that `1` represents "create user", `2` "edit user", `3` "create post", and so on.
-
-You may notice that the values are strings. This is so you could literally use strings like 'createUser' as it can also act as identifiers. Doing this, you may skip explicitly creating a list of numerical resourceIds, as long as app can handle it.
-
-Alternative example:
-
-```php
-$roleResources = [
-    1 => ['createUser', 'editUser'],
-    2 => ['createPost','editPost'],
-    3 => ['readPost', 'createComment']
-];
-```
-
-`Perm` does not care about how you name your roles or resources, it only cares about the roleIds and resourceIds you provide.
+- **$roleRanks** hierarchy of roles
+- **$roleResources** list of resources roles has access to
+- **$resourceRestrictions** list of restrictions resources have that must validate before access is granted
 
 ---
 
@@ -64,7 +32,39 @@ Keys `1`,`2`,`3` represent roleIds in your app. This could mean that `1` represe
 
 Values `1`,`2`,`3` represent their hierarchy. **Lower value means a higher rank**.
 
-Note: Resources of a lower role are inherited by higher roles. E.g., Resources of a role with rank `3` are inherirted by roles with a rank `2` and `1`.
+Note: Resources of a lower role are inherited by higher roles. E.g., Resources of a role with rank `3` are inherited by roles with a rank `2` and `1`.
+
+---
+
+`array` **$roleResources**
+
+An array where keys represent roleIds while values represent an array of resourceIds the roleId has access to. Example:
+
+```php
+$roleResources = [
+    1 => ['1','2'],
+    2 => ['3','4'],
+    3 => ['5','6']
+];
+```
+
+Keys `1`,`2`,`3` represent roleIds in your app. This could mean that `1` represents an admin, `2` a moderator, `3` a staff.
+
+Values `['1','2']`, `['3','4']`, `['5','6']` represent resourceIds in your app. This could mean that `1` represents "create user", `2` "edit user", `3` "create post", and so on.
+
+You may notice that the values are strings. This is so you could literally use strings like 'createUser' as it can also act as identifiers. Doing this, you may skip explicitly creating a list of numerical resourceIds, as long as your app can handle it.
+
+Alternative example:
+
+```php
+$roleResources = [
+    1 => ['createUser', 'editUser'],
+    2 => ['createPost','editPost'],
+    3 => ['readPost', 'createComment']
+];
+```
+
+`Perm` does not care how you name your roles or resources.
 
 ---
 
@@ -86,29 +86,36 @@ Allow if the requesting user is the owner of the resource
 
 `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`
 
-Allow if the custom rule is met and the requesting user is the owner of the resource
+Allow if the custom rule is met **and** the requesting user is the owner of the resource
+
+`Perm::RESTRICTION_PERMISSION_AND_CUSTOM`
+
+Allow if the role has explicit permission **and** if the custom rule is met
 
 Example:
 
 ```php
 $resourceRestrictions = [
-    1 => [
+    '1' => [
         Perm::RESTRICTION_PERMISSION
     ],
-    2 => [
+    '2' => [
         Perm::RESTRICTION_PERMISSION,
         Perm::RESTRICTION_OWNER
     ],
-    3 => [
+    '3' => [
         Perm::RESTRICTION_CUSTOM_RULE
     ],
-    4 => [
+    '4' => [
         Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER
+    ]
+    '5' => [
+        Perm::RESTRICTION_PERMISSION_AND_CUSTOM_RULE
     ]
 ];
 ```
 
-Keys `1`,`2`,`3`,`4` represent resourceIds in your app. This could mean `1` represents "create user", `2` "edit post", `3` "delete post", `4` "delete comment".
+Keys `1`,`2`,`3`,`4`, `5` represent resourceIds in your app. This could mean `1` represents "create user", `2` "edit post", `3` "delete post", `4` "delete comment", `5` "delete user".
 
 Values represent their restrictions that `Perm` understands. This is how `Perm` will interpret the abve example:
 
@@ -118,21 +125,21 @@ Values represent their restrictions that `Perm` understands. This is how `Perm` 
 
 - resourceId `3` or "delete post" resource, is allowed if its custom rule is met. E.g., any rule you set like "post can be deleted if x". The rule is customizable in your own code as long as it returns a boolean value.
 
-- resourceId `4` or "delete comment" resource, is allowed if its custom rule is met, **and **, if the requesting user is the owner of the resource.
+- resourceId `4` or "delete comment" resource, is allowed if its custom rule is met **and** if the requesting user is the owner of the resource.
+
+- resourceId `5` or "delete user" resource, is allowed if the role has explicit permission **and** if its custom rule is met
 
 As you can see in resourceId `2`, you can combine restrictions as you wish.
 
+**When using combined restrictions, only one restriction that validates is required to grant access.** E.g., In resourceId `2`, access is granted if the user has explicit permission for resourceId `2` **or** if its custom rule validates.
+
 ---
 
-If you are going to use the restrictions `Perm::RESTRICTION_OWNER`, `Perm::RESTRICTION_CUSTOM_RULE`, or `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`, you are required to provide the following custom classes:
-
-- **$ownerFinderFqn**
-
-- **$customRulesFqn**
-
-Both of these class must implement the provided `PermissionInterface`.
+### Optional custom classes
 
 `PermissionInterface` **$ownerFinderFqn**
+
+This custom class that you create will be used as the owner finder for a given resource.
 
 Required by:
 
@@ -140,9 +147,11 @@ Required by:
 
 - `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`
 
-This custom class that you create will be used as the owner finder for a given resource.
+Use the `->setOwnerFinderFqn($ownerFinderFqn)` method in the builder to apply this custom class.
 
 `PermissionInterface` **$customRulesFqn**
+
+This custom class that you create will be used as the custom rule handler for a given resource.
 
 Required by:
 
@@ -150,9 +159,11 @@ Required by:
 
 - `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`
 
-This custom class that you create will be used as the custom rule handler for your custom needs.
+- `Perm::RESTRICTION_PERMISSION_AND_CUSTOM_RULE`
 
-For an example on how to implement the `PermissionInterface`, see the `tests/unit/Samples` folder.
+Use the `->setCustomRulesFqn($customRulesFqn)` method in the builder to apply this custom class.
+
+For an example on how to implement these custom classes, see the `tests/unit/Samples` folder.
 
 ---
 
@@ -164,8 +175,8 @@ In your middleware, controller, or top of your app:
 use MetaRush\Perm;
 
 $perm = (new Perm\Builder)
-    ->setRoleResources($roleResources)
     ->setRoleRanks($roleRanks)
+    ->setRoleResources($roleResources)
     ->setResourceRestrictions($resourceRestrictions)
     ->setOwnerFinderFqn(Perm\Samples\MyOwnerFinder::class) // optional
     ->setCustomRulesFqn(Perm\Samples\MyCustomRules::class) // optional
@@ -177,7 +188,7 @@ Create a `Request` object
 ```php
 $userId = 5; // userId of the requesting user
 $roleId = 3; // roleId of $userId e.g., "staff"
-$resourceId = '7'; // resourceId of the requested resource e.g., "add user"
+$resourceId = 'addUser'; // resourceId of the requested resource
 $request = new Perm\Request($userId, $roleId, $resourceId);
 ```
 
@@ -189,11 +200,11 @@ Pass the `Request` object to `Perm'`s `hasPermission()`method:
 if (!$perm->hasPermission($request))
     exit('Access denied');
 
-// access allowed
+// access allowed, continue with the app...
 ```
 
-That's basically the idea on how to use `Perm`. The CRUD functions, or database of users, roles , and resources, are not included in this library as they are best implemented in userland -- since they are typically unique per project. The important thing to remember is to make them compatible with the three arrays required by `Perm` as discussed previously:
+That's the idea on how to use `Perm`. The CRUD functions, or database of users, roles , and resources, are not included in this library as they are best implemented in userland -- since they are typically unique per project. The important thing to remember is to make them compatible with the three arrays required by `Perm` as discussed previously:
 
-- **$roleResources**
 - **$roleRanks**
+- **$roleResources**
 - **$resourceRestrictions**

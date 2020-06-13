@@ -8,8 +8,9 @@ class Perm
 {
     public const RESTRICTION_PERMISSION = 'permission';
     public const RESTRICTION_CUSTOM_RULE = 'customRule';
-    public const RESTRICTION_CUSTOM_RULE_AND_OWNER = 'customRuleAndOwner';
     public const RESTRICTION_OWNER = 'owner';
+    public const RESTRICTION_PERMISSION_AND_CUSTOM_RULE = 'permissionAndCustomRule';
+    public const RESTRICTION_CUSTOM_RULE_AND_OWNER = 'customRuleAndOwner';
 
     private PermissionInterface $roles;
 
@@ -47,10 +48,13 @@ class Perm
             if ($v == self::RESTRICTION_CUSTOM_RULE && $this->hasCustomRulePermission($request))
                 $votes++;
 
-            if ($v == self::RESTRICTION_CUSTOM_RULE_AND_OWNER && $this->hasCustomRulePermission($request) && $this->hasOwnerPermission($request))
+            if ($v == self::RESTRICTION_OWNER && $this->hasOwnerPermission($request))
                 $votes++;
 
-            if ($v == self::RESTRICTION_OWNER && $this->hasOwnerPermission($request))
+            if ($v == self::RESTRICTION_PERMISSION_AND_CUSTOM_RULE && $this->roles->hasPermission($request) && $this->hasCustomRulePermission($request))
+                $votes++;
+
+            if ($v == self::RESTRICTION_CUSTOM_RULE_AND_OWNER && $this->hasCustomRulePermission($request) && $this->hasOwnerPermission($request))
                 $votes++;
         }
 

@@ -20,6 +20,7 @@ class PermTest extends TestCase
     private const RESOURCE_EDIT_POST = 'editPost';
     private const RESOURCE_DELETE_POST = 'deletePost';
     private const RESOURCE_DELETE_COMMENT = 'deleteComment';
+    private const RESOURCE_DELETE_USER = 'deleteUser';
 
     private array $userRoles;
     private array $roleResources;
@@ -40,6 +41,7 @@ class PermTest extends TestCase
         $this->roleResources = [
             self::ROLE_ADMIN => [
                 self::RESOURCE_CREATE_MOD,
+                self::RESOURCE_DELETE_USER,
             ],
             self::ROLE_MOD   => [
                 self::RESOURCE_CREATE_USER,
@@ -74,6 +76,9 @@ class PermTest extends TestCase
                 Perm::RESTRICTION_PERMISSION,
                 Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER,
             ],
+            self::RESOURCE_DELETE_USER    => [
+                Perm::RESTRICTION_PERMISSION_AND_CUSTOM_RULE,
+            ],
         ];
 
         // lower number is higher in rank
@@ -98,7 +103,6 @@ class PermTest extends TestCase
 
         $expected = true;
         $actual = $this->perm->hasPermission($request);
-
         $this->assertEquals($expected, $actual);
     }
 
@@ -169,6 +173,22 @@ class PermTest extends TestCase
         $request = new Request($userId, $roleId, $resourceId);
 
         $expected = false;
+        $actual = $this->perm->hasPermission($request);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function test_hasPermission_withPermissionAndCustomRuleRestriction_pass()
+    {
+        $this->perm->setCustomRulesFqn(Samples\MyCustomRules::class);
+
+        // ------------------------------------------------
+
+        $userId = 1;
+        $roleId = $this->userRoles[$userId];
+        $resourceId = self::RESOURCE_DELETE_USER;
+        $request = new Request($userId, $roleId, $resourceId);
+
+        $expected = true;
         $actual = $this->perm->hasPermission($request);
         $this->assertEquals($expected, $actual);
     }

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.1.0 - 2020-06-14
+
+### Added
+
+- Added new resource restriction: RESTRICTION_PERMISSION_AND_CUSTOM_RULE
+
 ## 2.0.0 - 2020-06-05
 
 ### Changed
