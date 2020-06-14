@@ -57,6 +57,17 @@ class MyCustomRules implements PermissionInterface
         // e.g., get number of admins from user db and subtract 1 admin
         $expectedNumberOfAdminsLeftAfterDeletingUser = 1;
 
+        // get userId to delete in query params
+        $userIdToDelete = $this->request->getServerRequest()->getQueryParams()['userId'];
+
+        // get role of userId to delete from db
+        $roleIdOfUserToDelete = 1;
+
+        // if role of user is not an admin, grant access
+        if ($roleIdOfUserToDelete !== 1)
+            return true;
+
+        // else make sure at least one admin remains
         return ($expectedNumberOfAdminsLeftAfterDeletingUser > 0);
     }
 

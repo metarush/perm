@@ -10,9 +10,9 @@ Install via composer as `metarush/perm`
 
 `Perm` expects you to provide the following arrays:
 
-- **$roleRanks** hierarchy of roles
-- **$roleResources** list of resources roles has access to
-- **$resourceRestrictions** list of restrictions resources have that must validate before access is granted
+- **$roleRanks**: hierarchy of roles
+- **$roleResources**: list of resources roles has access to
+- **$resourceRestrictions**: list of restrictions resources have that must validate before access is granted
 
 ---
 
@@ -137,7 +137,7 @@ As you can see in resourceId `2`, you can combine restrictions as you wish.
 
 ### Optional custom classes
 
-`PermissionInterface` **$ownerFinderFqn**
+`PermissionInterface` **$ownerFinder**
 
 This custom class that you create will be used as the owner finder for a given resource.
 
@@ -147,9 +147,9 @@ Required by:
 
 - `Perm::RESTRICTION_CUSTOM_RULE_AND_OWNER`
 
-Use the `->setOwnerFinderFqn($ownerFinderFqn)` method in the builder to apply this custom class.
+Use the `->setOwnerFinderFactoryFqn($ownerFinderFactoryFqn)` method in the builder to apply this custom class through a factory class that you will also create.
 
-`PermissionInterface` **$customRulesFqn**
+`PermissionInterface` **$customRules**
 
 This custom class that you create will be used as the custom rule handler for a given resource.
 
@@ -161,7 +161,10 @@ Required by:
 
 - `Perm::RESTRICTION_PERMISSION_AND_CUSTOM_RULE`
 
-Use the `->setCustomRulesFqn($customRulesFqn)` method in the builder to apply this custom class.
+Use the `->setCustomRulesFactoryFqn($customRulesFactoryFqn)` method in the builder to apply this custom class through a factory class that you will also create.
+
+To sum it up, if you're going to create an owner finder class then you also need to create a factory class that instantiates and returns your owner finder class.
+Likewise, if you're going to create a custom rules class, create a factory class for it too.
 
 For an example on how to implement these custom classes, see the `tests/unit/Samples` folder.
 
@@ -178,8 +181,8 @@ $perm = (new Perm\Builder)
     ->setRoleRanks($roleRanks)
     ->setRoleResources($roleResources)
     ->setResourceRestrictions($resourceRestrictions)
-    ->setOwnerFinderFqn(Perm\Samples\MyOwnerFinder::class) // optional
-    ->setCustomRulesFqn(Perm\Samples\MyCustomRules::class) // optional
+    ->setOwnerFinderFactoryFqn(Perm\Samples\MyOwnerFinderFactory::class) // optional
+    ->setCustomRulesFactoryFqn(Perm\Samples\MyCustomRulesFactory::class) // optional
     ->build();
 ```
 
@@ -189,10 +192,11 @@ Create a `Request` object
 $userId = 5; // userId of the requesting user
 $roleId = 3; // roleId of $userId e.g., "staff"
 $resourceId = 'addUser'; // resourceId of the requested resource
-$request = new Perm\Request($userId, $roleId, $resourceId);
+$serverRequest = $psr7serverRequest; // optional PSR-7 ServerRequestInterface object
+$request = new Perm\Request($userId, $roleId, $resourceId, $serverRequest);
 ```
 
-The above values are arbitrary data depending to your app.
+The above values are arbitrary data depending to your app. The optional `$serverRequest` parameter can be used in your custom rules.
 
 Pass the `Request` object to `Perm'`s `hasPermission()`method:
 

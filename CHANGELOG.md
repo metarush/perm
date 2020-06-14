@@ -8,6 +8,10 @@
 so dependency injection can be implemented in user land properly and also have lazy-loading as
 added benefit.
 
+### Added
+
+- Add option to include PSR-7 ServerRequestInterface object in Perm's Request object
+
 ## 2.1.0 - 2020-06-14
 
 ### Added

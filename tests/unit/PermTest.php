@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use MetaRush\Perm\Perm;
 use MetaRush\Perm\Roles;
 use MetaRush\Perm\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 class PermTest extends TestCase
 {
@@ -183,14 +184,21 @@ class PermTest extends TestCase
 
         // ------------------------------------------------
 
-        $userId = 1;
-        $roleId = $this->userRoles[$userId];
+        $actorId = 1;
+        $roleId = $this->userRoles[$actorId];
         $resourceId = self::RESOURCE_DELETE_USER;
-        $request = new Request($userId, $roleId, $resourceId);
+        $serverRequest = $this->getServerRequestMock(['userId' => $actorId]);
+        $request = new Request($actorId, $roleId, $resourceId, $serverRequest);
 
         $expected = true;
         $actual = $this->perm->hasPermission($request);
         $this->assertEquals($expected, $actual);
+    }
+
+    private function getServerRequestMock(array $data): ServerRequestInterface
+    {
+        $request = new \Laminas\Diactoros\ServerRequest;
+        return $request->withQueryParams($data);
     }
 
 }
