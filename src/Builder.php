@@ -23,8 +23,8 @@ class Builder
      * @var array[]
      */
     private array $resourceRestrictions;
-    private ?string $ownerFinderFqn = null;
-    private ?string $customRulesFqn = null;
+    private ?string $ownerFinderFactoryFqn = null;
+    private ?string $customRulesFactoryFqn = null;
 
     /**
      *
@@ -59,15 +59,15 @@ class Builder
         return $this;
     }
 
-    public function setOwnerFinderFqn(string $ownerFinderFqn): self
+    public function setOwnerFinderFactoryFqn(string $ownerFinderFactoryFqn): self
     {
-        $this->ownerFinderFqn = $ownerFinderFqn;
+        $this->ownerFinderFactoryFqn = $ownerFinderFactoryFqn;
         return $this;
     }
 
-    public function setCustomRulesFqn(string $customRulesFqn): self
+    public function setCustomRulesFactoryFqn(string $customRulesFactoryFqn): self
     {
-        $this->customRulesFqn = $customRulesFqn;
+        $this->customRulesFactoryFqn = $customRulesFactoryFqn;
         return $this;
     }
 
@@ -76,11 +76,11 @@ class Builder
         $roles = new Roles($this->roleResources, $this->roleRanks);
         $perm = new Perm($roles, $this->resourceRestrictions);
 
-        if ($this->ownerFinderFqn)
-            $perm->setOwnerFinderFqn($this->ownerFinderFqn);
+        if ($this->ownerFinderFactoryFqn)
+            $perm->setOwnerFinderFactoryFqn($this->ownerFinderFactoryFqn);
 
-        if ($this->customRulesFqn)
-            $perm->setCustomRulesFqn($this->customRulesFqn);
+        if ($this->customRulesFactoryFqn)
+            $perm->setCustomRulesFactoryFqn($this->customRulesFactoryFqn);
 
         return $perm;
     }

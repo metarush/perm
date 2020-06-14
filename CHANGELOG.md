@@ -1,10 +1,18 @@
 # CHANGELOG
 
+## 3.0.0 - 2020-06-15
+
+### Changed
+
+- Custom classes for owner finder and custom rules must now be instantiated from factories. This is
+so dependency injection can be implemented in user land properly and also have lazy-loading as
+added benefit.
+
 ## 2.1.0 - 2020-06-14
 
 ### Added
 
-- Added new resource restriction: RESTRICTION_PERMISSION_AND_CUSTOM_RULE
+- Add new resource restriction: RESTRICTION_PERMISSION_AND_CUSTOM_RULE.
 
 ## 2.0.0 - 2020-06-05
 

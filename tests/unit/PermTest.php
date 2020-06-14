@@ -108,7 +108,7 @@ class PermTest extends TestCase
 
     public function test_hasPermission_withOwnerRestriction_pass()
     {
-        $this->perm->setOwnerFinderFqn(Samples\MyOwnerFinder::class);
+        $this->perm->setOwnerFinderFactoryFqn(Samples\MyOwnerFinderFactory::class);
 
         // ------------------------------------------------
 
@@ -135,7 +135,7 @@ class PermTest extends TestCase
 
     public function test_hasPermission_withCustomRuleRestriction_pass()
     {
-        $this->perm->setCustomRulesFqn(Samples\MyCustomRules::class);
+        $this->perm->setCustomRulesFactoryFqn(Samples\MyCustomRulesFactory::class);
 
         // ------------------------------------------------
 
@@ -151,8 +151,8 @@ class PermTest extends TestCase
 
     public function test_hasPermission_withCustomRuleAndOwnerRestriction_pass()
     {
-        $this->perm->setOwnerFinderFqn(Samples\MyOwnerFinder::class);
-        $this->perm->setCustomRulesFqn(Samples\MyCustomRules::class);
+        $this->perm->setOwnerFinderFactoryFqn(Samples\MyOwnerFinderFactory::class);
+        $this->perm->setCustomRulesFactoryFqn(Samples\MyCustomRulesFactory::class);
 
         // ------------------------------------------------
 
@@ -179,7 +179,7 @@ class PermTest extends TestCase
 
     public function test_hasPermission_withPermissionAndCustomRuleRestriction_pass()
     {
-        $this->perm->setCustomRulesFqn(Samples\MyCustomRules::class);
+        $this->perm->setCustomRulesFactoryFqn(Samples\MyCustomRulesFactory::class);
 
         // ------------------------------------------------
 

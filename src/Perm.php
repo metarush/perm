@@ -20,8 +20,8 @@ class Perm
      * @var array[]
      */
     private array $restrictions;
-    private string $ownerFinderFqn;
-    private string $customRulesFqn;
+    private string $ownerFinderFactoryFqn;
+    private string $customRulesFactoryFqn;
 
     /**
      *
@@ -62,43 +62,39 @@ class Perm
     }
 
     /**
-     * Set the FQN of userland owner finder class
+     * Set the FQN of userland owner finder factory class
      *
-     * @param string $ownerFinderFqn
+     * @param string $ownerFinderFactoryFqn
      * @return void
      */
-    public function setOwnerFinderFqn(string $ownerFinderFqn): void
+    public function setOwnerFinderFactoryFqn(string $ownerFinderFactoryFqn): void
     {
-        $this->ownerFinderFqn = $ownerFinderFqn;
+        $this->ownerFinderFactoryFqn = $ownerFinderFactoryFqn;
     }
 
     /**
-     * Set the FQN of userland custom rules class
+     * Set the FQN of userland custom rules factory class
      *
-     * @param string $customRulesFqn
+     * @param string $customRulesFactoryFqn
      * @return void
      */
-    public function setCustomRulesFqn(string $customRulesFqn): void
+    public function setCustomRulesFactoryFqn(string $customRulesFactoryFqn): void
     {
-        $this->customRulesFqn = $customRulesFqn;
+        $this->customRulesFactoryFqn = $customRulesFactoryFqn;
     }
 
     private function hasCustomRulePermission(Request $request): bool
     {
-        $customRuleFqn = $this->customRulesFqn;
-
-        /* @var $customRule PermissionInterface  */
-        $customRule = new $customRuleFqn;
+        /* @var $customRule PermissionInterface */
+        $customRule = $this->customRulesFactoryFqn::getInstance();
 
         return $customRule->hasPermission($request);
     }
 
     private function hasOwnerPermission(Request $request): bool
     {
-        $ownerFinderFqn = $this->ownerFinderFqn;
-
-        /* @var $ownerFinder PermissionInterface  */
-        $ownerFinder = new $ownerFinderFqn;
+        /* @var $ownerFinder PermissionInterface */
+        $ownerFinder = $this->ownerFinderFactoryFqn::getInstance();
 
         return $ownerFinder->hasPermission($request);
     }

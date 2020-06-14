@@ -57,8 +57,8 @@ class BuilderTest extends TestCase
             ->setRoleResources($roleResources)
             ->setRoleRanks($roleRanks)
             ->setResourceRestrictions($resourceRestrictions)
-            ->setCustomRulesFqn(Samples\MyCustomRules::class)
-            ->setOwnerFinderFqn(Samples\MyOwnerFinder::class)
+            ->setCustomRulesFactoryFqn(Samples\MyCustomRulesFactory::class)
+            ->setOwnerFinderFactoryFqn(Samples\MyCustomRulesFactory::class)
             ->build();
 
         $this->assertInstanceOf($expected, $actual);
