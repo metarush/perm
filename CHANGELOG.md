@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.0.1 - 2022-07-29
+
+### Fixed
+
+- Update laminas/diactoros to 2.14 due to security advisory
+
 ## 3.0.0 - 2020-06-15
 
 ### Changed
