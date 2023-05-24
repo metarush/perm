@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## 3.0.2 - 2022-07-29
+## 3.0.3 - 2022-05-25
+
+### Fixed
+
+- Fix typo in CHANGELOG
+
+## 3.0.2 - 2023-05-25
 
 ### Fixed
 
