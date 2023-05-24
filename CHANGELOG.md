@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.0.2 - 2022-07-29
+
+### Fixed
+
+- Update laminas/diactoros to 2.25 due to security advisory https://github.com/advisories/GHSA-xv3h-4844-9h36
+
 ## 3.0.1 - 2022-07-29
 
 ### Fixed

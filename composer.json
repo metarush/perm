@@ -30,6 +30,6 @@
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^9.1",
         "phpstan/phpstan": "^0.12",
-        "laminas/laminas-diactoros": "^2.14"
+        "laminas/laminas-diactoros": "^2.25"
     }
 }
